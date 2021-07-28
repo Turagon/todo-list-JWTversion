@@ -5,7 +5,9 @@ const methodOverride = require('method-override')
 const passport = require('passport')
 const session = require('express-session')
 const flash = require('connect-flash')
+const cookieParser = require('cookie-parser')
 const { urlencoded } = require('body-parser')
+const port = process.env.PORT || 3000
 
 const app = express()
 
@@ -22,7 +24,10 @@ app.use(session({
   saveUninitialized: true
 }))
 
-
+// Passport middleware
+require('./config/passport')(passport)
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Connect flash
 app.use(flash())
@@ -30,4 +35,13 @@ app.use((req, res, next) => {
   res.locals.msg = req.flash('msg')
   res.locals.error = req.flash('error')
   next()
+})
+
+const routes = require('./routes')
+app.use(routes)
+app.use(cookieParser)
+
+
+app.listen(port, () => {
+  console.log('server on')
 })
