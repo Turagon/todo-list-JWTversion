@@ -1,0 +1,14 @@
+<form action="/{{todo.id}}?_method=PUT" method="POST">
+  <div class="todo-title">
+    <label class="col-form-label" for="todo-title"><i class="fas fa-pen-square"></i>事項</label>
+    <input type="text" name="name" placeholder="name" id="todo-title" value="{{todo.name}}">
+  </div>
+  <div class="todo-dueDate">
+    <label class="col-form-label" for="dueDate"><i class="far fa-calendar-alt"></i>期限</label>
+    <input type="date" name="dueDate" id="dueDate" value="{{dateConvert todo.dueDate}}">
+  </div>
+  <div class="add-btn-box">
+    <button type="submit">送出</button>
+    <a href="/">回首頁</a>
+  </div>
+</form>

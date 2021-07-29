@@ -5,7 +5,7 @@ const db = require('../../models')
 const User = db.User
 
 router.get('/', (req, res) => {
-  if (req.headers.cookie) {
+  if (req.headers.cookie.split('=')[0] === 'userInfo') {
     const email = req.headers.cookie.split('=')[1].split(';')[0]
     res.render('auth', {layout: 'loginPage', email})
   } else {
@@ -18,7 +18,6 @@ router.get('/register', (req, res) => {
 })
 
 router.get('/logout', (req, res) => {
-  console.log('i am at logout')
 })
 
 router.post('/',

@@ -9,6 +9,10 @@ const cookieParser = require('cookie-parser')
 const { urlencoded } = require('body-parser')
 const port = process.env.PORT || 3000
 
+// const db = require('./models')
+// const User = db.User
+// const Todo = db.Todo
+
 const app = express()
 
 app.engine('hbs', exphbs({defaultLayout: 'main', extname: 'hbs'}))
@@ -16,6 +20,16 @@ app.set('view engine', 'hbs')
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(methodOverride('_method'))
+
+// register helper
+const handlebars = require('handlebars')
+handlebars.registerHelper('dateConvert', function (value) {
+  const date = new Date(value)
+  var Y = date.getFullYear() + '-'
+  var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
+  var D = date.getDate()
+  return Y + M + D
+})
 
 // express-session
 app.use(session({
@@ -32,6 +46,7 @@ app.use(passport.session());
 // Connect flash
 app.use(flash())
 app.use((req, res, next) => {
+  res.locals.user = req.user
   res.locals.msg = req.flash('msg')
   res.locals.error = req.flash('error')
   next()

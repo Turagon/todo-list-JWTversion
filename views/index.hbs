@@ -1,2 +1,30 @@
-<div class="todo-pending"></div>
-<div class="todo-done"></div>
+<div class="todo-pending">
+  <h5 class="todo-lists">待辦事項</h5>
+  {{#each todos}}
+  <div class="todo-item-box">
+    <div class="todo-name">
+      <span class="todo-content">{{this.name}}</span>
+    </div>
+    <div class="todo-btn">
+      <span class="todo-deadline">{{dateConvert this.dueDate}}</span>
+      <a href="/edit/{{this.id}}" class="todo-edit-btn">Edit</a>
+      <a href="/done/{{this.id}}" class="todo-done-btn">Done</a>
+      <button href="iamnotgoinganywhere" class="todo-delete-btn" id="delete-btn" data-id="{{this.id}}">Delete</button>
+    </div>
+  </div>
+  {{/each}}
+</div>
+<div class="todo-done">
+  <h5 class="todo-lists">已完成事項</h5>
+  {{#each done}}
+  <div class="todo-done-box">
+    <div class="todo-name done">
+      <span class="todo-content done">{{this.name}}</span>
+    </div>
+    <div class="todo-btn done">
+      <a href="/revert/{{this.id}}" class="todo-done-btn">Revert</a>
+      <a href="/delete/{{this.id}}" class="todo-delete-btn">Delete</a>
+    </div>
+  </div>
+  {{/each}}
+</div>
