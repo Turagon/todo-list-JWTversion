@@ -1,7 +1,11 @@
 const strategy = require('passport-local').Strategy
+const jwtStrategy = require('passport-jwt').Strategy
+// const ExtractJwt = require('passport-jwt').ExtractJwt
 const bcrypt = require('bcryptjs')
 const db = require('../models')
+const fs = require('fs')
 const User = db.User
+const PUB_KEY = fs.readFileSync(__dirname + '/../rsaPublicKey.pem', 'utf8')
 
 const localStrategy = new strategy({usernameField: 'email'}, 
   async(email, password, done) => {
@@ -12,7 +16,7 @@ const localStrategy = new strategy({usernameField: 'email'},
           if (isMatch) {
             return done(null, userInfo, {message: 'Welcome!'})
           } else {
-            return done(null, flase, {message: 'incorrect password'})
+            return done(null, false, {message: 'incorrect password'})
           }
         })
       } else {
@@ -25,9 +29,40 @@ const localStrategy = new strategy({usernameField: 'email'},
   }
 )
 
+const cookieExtractor = (req) => {
+  let token = null
+  if (req && req.cookies['jwt']) {
+    token = req.cookies['jwt']['token']
+  } else {
+    return
+  }
+  return token
+}
+
+const options = {
+  jwtFromRequest: cookieExtractor,
+  secretOrKey: PUB_KEY,
+  algorithms: ['RS256']
+}
+
+const jwt = new jwtStrategy(options, async(payload, done) => {
+  try {
+    const user = await User.findOne({where: {id: payload.sub}})
+    if (user) {
+      return done(null, user)
+    } else {
+      return done(null, false)
+    }
+  }
+  catch (error) {
+    console.log(error)
+  }
+})
+
 // pack middleware
 function passportSet(passport) {
   passport.use(localStrategy)
+  passport.use(jwt)
 
   passport.serializeUser((user, done) => {
     done(null, user.id);

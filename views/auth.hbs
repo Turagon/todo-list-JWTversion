@@ -1,4 +1,5 @@
-<form action="/auth/" method="post" class="login">
+{{!-- <form action="/auth/" method="post" class="login"> --}}
+<form action="/auth/jwt" method="post" class="login">
   {{#each errors}}
   <div class="alert alert-warning alert-dismissible fade show" role="alert">
     <strong>Note!</strong> {{this.msg}}
@@ -35,7 +36,7 @@
   </div>
   <div class="login-button-box mt-3">
     <button type="submit" class="login-button">Login</button>
-    <a href="/auth/facebook" class="facebook"><i class="fab fa-facebook-square"></i>FaceBook login</a>
+    {{!-- <a href="/auth/jwt" class="facebook"><i class="fab fa-facebook-square"></i>JWT login</a> --}}
     <a href="/auth/register" class="homepage">Don't have account? -> Register</a>
   </div>
 </form>

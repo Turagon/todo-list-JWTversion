@@ -5,13 +5,10 @@ const methodOverride = require('method-override')
 const passport = require('passport')
 const session = require('express-session')
 const flash = require('connect-flash')
-const cookieParser = require('cookie-parser')
 const { urlencoded } = require('body-parser')
-const port = process.env.PORT || 3000
+const cookieParser = require('cookie-parser')
 
-// const db = require('./models')
-// const User = db.User
-// const Todo = db.Todo
+const port = process.env.PORT || 3000
 
 const app = express()
 
@@ -24,7 +21,7 @@ app.use(methodOverride('_method'))
 // register helper
 const handlebars = require('handlebars')
 handlebars.registerHelper('dateConvert', function (value) {
-  const date = new Date(value)
+  const date = new Date(value + 'UTC')
   var Y = date.getFullYear() + '-'
   var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
   var D = date.getDate()
@@ -53,8 +50,8 @@ app.use((req, res, next) => {
 })
 
 const routes = require('./routes')
+app.use(cookieParser())
 app.use(routes)
-app.use(cookieParser)
 
 
 app.listen(port, () => {

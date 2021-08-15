@@ -23,7 +23,9 @@
     </div>
     <div class="todo-btn done">
       <a href="/revert/{{this.id}}" class="todo-done-btn">Revert</a>
-      <a href="/delete/{{this.id}}" class="todo-delete-btn">Delete</a>
+      <form action="/{{this.id}}?_method=DELETE" method="POST" id="delete-submit" class="delete-submit">
+        <button type="submit" class="delete-confirm-btn">刪除</button>
+      </form>
     </div>
   </div>
   {{/each}}

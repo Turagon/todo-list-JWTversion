@@ -1,19 +1,18 @@
 const router = require('express').Router()
-const { ensureAuth } = require('../../public/javascripts/pageAuth')
 
 const db = require('../../models')
+const passport = require('passport')
 const Todo = db.Todo
-
-router.use(ensureAuth)
+router.use(passport.authenticate('jwt', { session: false, failureRedirect: '/auth' }))
 
 router.get('/', (req, res) => {
   const userId = req.user.id
   Promise.all([Todo.findAll({ where: { userId, isDone: false }, raw: true, nest: true }), Todo.findAll({ where: { userId, isDone: true }, raw: true, nest: true })])
-  .then(results => {
-    const [todos, done] = results
-    res.render('index', { todos, done })
-  })
-  
+    .then(results => {
+      const [todos, done] = results
+      res.render('index', { todos, done })
+    })
+    .catch(error => console.log(error))
 })
 
 router.get('/edit/:id', (req, res) => {
@@ -54,9 +53,8 @@ router.get('/revert/:id', (req, res) => {
 })
 
 router.get('/logout', (req, res) => {
-  const username = req.user ? req.user.name : 'Sir'
-  req.logout()
-  req.flash('msg', `${username} You have successfully logout`)
+  req.flash('msg', `You have successfully logout`)
+  res.clearCookie('jwt')
   res.redirect('/auth')
 })
 

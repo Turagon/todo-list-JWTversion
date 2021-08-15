@@ -1,7 +1,9 @@
 const router = require('express').Router()
 const { equals, isEmail} = require('validator')
 const passport = require('passport')
+const bcrypt = require('bcryptjs')
 const db = require('../../models')
+const issueJwt = require('../../public/javascripts/issueJwt')
 const User = db.User
 
 router.get('/', (req, res) => {
@@ -20,13 +22,28 @@ router.get('/register', (req, res) => {
 router.get('/logout', (req, res) => {
 })
 
-router.post('/',
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/auth',
-    failureFlash: true,
-  })
-)
+router.post('/jwt', async(req, res) => {
+  const email = req.body.email
+  const password = req.body.password
+  const user = await User.findOne({ where: { email } })
+  if (user) {
+    bcrypt.compare(password, user.password, (err, isMatch) => {
+      if (isMatch) {
+        const tokenInfo = issueJwt(user)
+        const allInfo = {
+          token: tokenInfo.token,
+          userId: user.id,
+          userEmail: user.email
+        }
+        res.cookie('jwt', allInfo, { httpOnly: true, maxAge: tokenInfo.expires })
+        res.redirect('/')
+      } else {
+        req.flash('error', `Passowrd incorrect`)
+        res.redirect('/auth')
+      }
+    })
+  }
+})
 
 router.post('/register', (req, res) => {
   const {name, email, password, password2} = req.body
@@ -68,7 +85,6 @@ router.post('/register', (req, res) => {
           password
         })
         .then(user => {
-          res.cookie('userInfo', user.email, { SameSite: true, path: '/auth', httpOnly: true, maxAge: 600000 })
           res.redirect('/auth')
         })
       }

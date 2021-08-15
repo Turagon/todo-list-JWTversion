@@ -109,7 +109,7 @@
   justify-content: space-between;
 }
 
-.todo-deadline, .todo-edit-btn, .todo-done-btn, .todo-delete-btn {
+.todo-deadline, .todo-edit-btn, .todo-done-btn, .todo-delete-btn, .todo-done-btn, .delete-submit {
   width: 23%;
   color: aliceblue;
   font-size: 15px;
@@ -118,6 +118,15 @@
   border: none;
   border-radius: 3px;
   text-decoration: none;
+}
+
+.delete-confirm-btn {
+  border: none;
+  background-color: #c1121f;
+  width: 100%;
+  border-radius: 3px;
+  color: aliceblue;
+  font-weight: bolder;
 }
 
 .todo-deadline {

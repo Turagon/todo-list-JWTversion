@@ -2,7 +2,7 @@
 const {
   Model
 } = require('sequelize');
-const user = require('./user');
+const User = require('./user');//這行不知道在做甚麼?
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     static associate(models) {
