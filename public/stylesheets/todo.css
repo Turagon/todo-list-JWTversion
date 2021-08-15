@@ -28,7 +28,15 @@
   color: #283618;
 }
 
+.header-btn {
+  width: 18%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .create-new {
+  padding: 1px 10px;
+  border-radius: 3px;
   text-decoration: none;
   font-weight: bolder;
   background-color: #606c38;
@@ -36,6 +44,8 @@
 }
 
 .logout {
+  padding: 1px 10px;
+  border-radius: 3px;
   text-decoration: none;
   font-weight: bolder;
   background-color: #bc6c25;
@@ -48,7 +58,7 @@
   margin: 10px auto;
 }
 
-.todo-add-form div {
+.todo-add-form div, .todo-edit-form div {
   margin: 5px 0 20px 0;
 }
 
@@ -72,10 +82,26 @@
   text-decoration: none;
   width: 20%;
   text-align: center;
+  color: aliceblue;
+  background-color: cornflowerblue;
+  border-radius: 3px;
+  font-weight: bolder;
 }
 
 .add-btn-box button {
   width: 20%;
+  border: none;
+  border-radius: 3px;
+  background-color: cadetblue;
+  color: aliceblue;
+  font-weight: bolder;
+}
+
+#todo-title, #dueDate {
+  padding: 2px;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 0 3px 12px 0 rgba(20, 20, 20, 0.5);
 }
 
 /* index.hbs */

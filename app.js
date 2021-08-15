@@ -22,10 +22,7 @@ app.use(methodOverride('_method'))
 const handlebars = require('handlebars')
 handlebars.registerHelper('dateConvert', function (value) {
   const date = new Date(value + 'UTC')
-  var Y = date.getFullYear() + '-'
-  var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
-  var D = date.getDate()
-  return Y + M + D
+  return date.toJSON().slice(0, 10)
 })
 
 // express-session
