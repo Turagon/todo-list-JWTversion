@@ -40,10 +40,6 @@ router.post('/jwt', async(req, res) => {
 router.post('/register', (req, res) => {
   const {name, email, password, password2} = req.body
   const errors = []
-  if (!isEmail(email)) {
-    errors.push({ msg: 'the email format is invalid' })
-  }
-
   if (!equals(password, password2)) {
     errors.push({ msg: 'the passwords do not match each other' })
   }
@@ -69,8 +65,12 @@ router.post('/register', (req, res) => {
       res.redirect('/auth')
     })
     .catch(err => {
+      let error = err.errors[0].message
+      if (error !== 'Invalid email format') {
+        error = 'this email is registered already'
+      } 
       res.render('register', {
-        error: 'this email is registered already',
+        error,
         name,
         email,
         password,

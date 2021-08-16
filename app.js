@@ -5,7 +5,6 @@ const methodOverride = require('method-override')
 const passport = require('passport')
 const session = require('express-session')
 const flash = require('connect-flash')
-const { urlencoded } = require('body-parser')
 const cookieParser = require('cookie-parser')
 
 const port = process.env.PORT || 3000

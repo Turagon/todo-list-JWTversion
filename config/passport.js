@@ -3,10 +3,11 @@ const jwtStrategy = require('passport-jwt').Strategy
 // const ExtractJwt = require('passport-jwt').ExtractJwt
 const bcrypt = require('bcryptjs')
 const db = require('../models')
-const fs = require('fs')
 const User = db.User
+const fs = require('fs')
 const PUB_KEY = fs.readFileSync(__dirname + '/../rsaPublicKey.pem', 'utf8')
 
+// 這次使用JWT作為身分驗證方式 local strategy暫時不用
 const localStrategy = new strategy({usernameField: 'email'}, 
   async(email, password, done) => {
     try {
