@@ -42,6 +42,7 @@ app.use(flash())
 app.use((req, res, next) => {
   res.locals.user = req.user
   res.locals.msg = req.flash('msg')
+  res.locals.email = req.flash('email')
   res.locals.error = req.flash('error')
   next()
 })

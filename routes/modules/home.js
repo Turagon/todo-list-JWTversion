@@ -8,18 +8,18 @@ router.use(passport.authenticate('jwt', { session: false, failureRedirect: '/aut
 router.get('/', (req, res) => {
   const userId = req.user.id
   Promise.all([Todo.findAll({ where: { userId, isDone: false }, raw: true, nest: true }), Todo.findAll({ where: { userId, isDone: true }, raw: true, nest: true })])
-    .then(results => {
-      const [todos, done] = results
-      res.render('index', { todos, done })
-    })
-    .catch(error => console.log(error))
+  .then(results => {
+    const [todos, done] = results
+    res.render('index', { todos, done })
+  })
+  .catch(error => console.log(error))
 })
 
 router.get('/edit/:id', (req, res) => {
   const id = Number(req.params.id)
   Todo.findByPk(id)
-    .then(todo => res.render('edit', { todo: todo.get() }))
-    .catch(error => console.log(error))
+  .then(todo => res.render('edit', { todo: todo.get() }))
+  .catch(error => console.log(error))
 })
 
 router.get('/add', (req, res) => {
@@ -38,7 +38,7 @@ router.get('/done/:id', (req, res) => {
     })
     .catch(error => console.log(error))
 })
-
+  
 router.get('/revert/:id', (req, res) => {
   const id = Number(req.params.id)
   const userId = req.user.id
@@ -51,13 +51,13 @@ router.get('/revert/:id', (req, res) => {
     })
     .catch(error => console.log(error))
 })
-
+  
 router.get('/logout', (req, res) => {
   req.flash('msg', `You have successfully logout`)
   res.clearCookie('jwt')
   res.redirect('/auth')
 })
-
+  
 router.put('/:id', (req, res) => {
   const { name, dueDate } = req.body
   Todo.findByPk(Number(req.params.id))

@@ -1,25 +1,16 @@
 const router = require('express').Router()
 const { equals, isEmail} = require('validator')
-const passport = require('passport')
 const bcrypt = require('bcryptjs')
 const db = require('../../models')
 const issueJwt = require('../../public/javascripts/issueJwt')
 const User = db.User
 
 router.get('/', (req, res) => {
-  if (req.headers.cookie.split('=')[0] === 'userInfo') {
-    const email = req.headers.cookie.split('=')[1].split(';')[0]
-    res.render('auth', {layout: 'loginPage', email})
-  } else {
     res.render('auth', {layout: 'loginPage'})
-  }
 })
 
 router.get('/register', (req, res) => {
   res.render('register', { layout: 'loginPage'})
-})
-
-router.get('/logout', (req, res) => {
 })
 
 router.post('/jwt', async(req, res) => {
@@ -33,15 +24,16 @@ router.post('/jwt', async(req, res) => {
         const allInfo = {
           token: tokenInfo.token,
           userId: user.id,
-          userEmail: user.email
         }
         res.cookie('jwt', allInfo, { httpOnly: true, maxAge: tokenInfo.expires })
         res.redirect('/')
       } else {
-        req.flash('error', `Passowrd incorrect`)
-        res.redirect('/auth')
+        res.render('auth', { error: `Passowrd incorrect`, email, layout: 'loginPage' })
       }
     })
+  } else {
+    req.flash('error', `Please register first`)
+    res.redirect('/auth/register')
   }
 })
 
@@ -66,28 +58,25 @@ router.post('/register', (req, res) => {
       layout: 'loginPage'
     })
   } else {
-    User.findOne({where: {email}})
+    User.create({
+      name,
+      email,
+      password
+    })
     .then(user => {
-      if (user) {
-        errors.push({ msg: 'email has been registered already' })
-        return res.render('register', {
-          errors,
-          name,
-          email,
-          password,
-          password2,
-          layout: 'loginPage'
-        })
-      } else {
-        User.create({
-          name,
-          email,
-          password
-        })
-        .then(user => {
-          res.redirect('/auth')
-        })
-      }
+      req.flash('msg', `Welcome, ${user.name}`)
+      req.flash('email', `${user.email}`)
+      res.redirect('/auth')
+    })
+    .catch(err => {
+      res.render('register', {
+        error: 'this email is registered already',
+        name,
+        email,
+        password,
+        password2,
+        layout: 'loginPage'
+      })
     })
   }
 })
